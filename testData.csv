@@ -1,3 +1,6 @@
+#group,false,false,false,false,false,false,false
+#datatype,dateTime:number,measurement,tag,tag,double,double,long
+#default,,,,,,,
 Timestamp,Measurement,location,sensor_id,temperature,humidity,co2
 ,environment_sensors,room1,TEMP01,22.5,45.2,
 ,environment_sensors,room1,CO2_01,,,450
