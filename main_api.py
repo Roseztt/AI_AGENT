@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from queryTest import query_rag
+from rag_query import query_rag
 
 #create API
 app = FastAPI(
