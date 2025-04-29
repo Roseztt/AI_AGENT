@@ -1,0 +1,39 @@
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from queryTest import query_rag
+
+#create API
+app = FastAPI(
+    title="RAG AI_AGENT",
+    description="RAG Agent that look through data in a Chroma Database",
+)
+
+#request model for querying RAG needs a user query input
+class QueryRequest(BaseModel):
+    query_text: str
+    top_k: int = 10
+
+#Query respond model with optional source that tells the user where the LLM get the answer from
+class QueryResponse(BaseModel):
+    response: str
+
+#API path that  uses the response model to run a query
+@app.post("/query/", response_model=QueryResponse)
+
+#Sends in the user query through API following the request model
+def execute_query(request: QueryRequest):
+    query_text = request.query_text
+    k = request.top_k
+
+    if query_text == "":
+        raise HTTPException(status_code=400, detail="Query cannot be empty.")
+    
+    response_text = query_rag(query_text=query_text, k=k)
+    
+    return QueryResponse(response=response_text)
+
+@app.get("/")
+def root():
+    return {"Successfully connected to AI Agent, code: 200"}
+
+

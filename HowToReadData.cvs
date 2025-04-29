@@ -1,0 +1,18 @@
+Here is how to read the data:
+To read this data each row represents a data point: these data points can be compared, 
+the Data record time represents the time that each data is recorded they are listed in order in year-month-date(space)time format with the first data point being the earliest and the last data point being the latest. 
+The Measured electricty record the electricty used by each breaker at that Data record time, the higher the number the more electricty used.
+
+These data are ordered by their RPP followed by it's Breaker and each data point of the same breaker is ordered by the time recorded.
+For example All the data points of RPP A-1-1 are listed together arraged by all it's breaker and the recorded time.
+Note that the Breaker can have the same name but they are different breaker under different RPP. 
+Example: Breaker 1/3 of RPP A-1-1 is NOT the same as Breaker 1/3 of RPP A-1-2
+Note that each RPP can have multiple Breakers but each breaker can only have one RPP
+
+And the letter and number of each RPP repersents  which selection the RPP belongs to
+For example RPP A-1-1 is the first RPP in selection A1
+RPP A-1-2 is the second  RPP in selection A1 so on
+
+you can view each breaker of a RPP as a unit, each unit's data is ordered by time, it means the data is recorded at that time on that unit
+the Measured electricty on each line is the actual data recorded. It repersents the amount of electricty used by that unit at that time.
+Now answer the question based only on the following context:
