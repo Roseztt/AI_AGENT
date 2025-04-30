@@ -1,0 +1,107 @@
+// Required for components using React Hooks (like useState) in Next.js App Router
+'use client'
+import { useState } from 'react'
+import Sidebar from '@/components/Sidebar' // Assuming this component exists
+import ChatInput from '@/components/ChatInput' // Assuming this component exists
+import ChatBubble from '@/components/ChatBubble' // Assuming this component exists
+import React from 'react' // Ensure React is imported if using React.Fragment or complex JSX
+
+// Define the structure for messages used in this component's state
+type Message = {
+  text: string;
+  // Use 'type' as defined in the user's original code for this component
+  type: "user" | "bot";
+  // Add optional id if needed for keys, though index is used below
+  // id?: number;
+};
+
+// Define the structure expected from the API response
+interface ApiResponse {
+    response: string;
+}
+
+
+// This is the main component for the page
+export default function Home() {
+
+  // State for storing the chat messages, initialized with a bot message
+  const [messages, setMessages] = useState<Message[]>([
+    { text: '你好！我是你的 AI 助手，有什么我可以帮忙的吗？', type: 'bot' } // Initial bot message
+  ])
+  // Removed loading and error states
+
+
+  // --- SIMPLIFIED handleSend Function ---
+  // This function sends the user message to the API and adds the response.
+  // NOTE: Removed try/catch error handling for simplicity. Assumes API call succeeds.
+  const handleSend = async (text: string) => {
+    if (!text.trim()) return; // Don't send empty messages
+
+    // 1. Add user's message to the chat display immediately
+    const userMessage: Message = {
+      text,
+      type: 'user',
+    };
+    // Use functional update for state
+    setMessages(prev => [...prev, userMessage]);
+
+    // 2. Send the user's message to your FastAPI backend
+    // *** Replace with your actual API endpoint URL if different ***
+    const apiUrl = '/query/'; // Assuming relative path or use full URL e.g., 'http://localhost:8000/query/'
+
+    // Make the API call
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // Send the query_text in the expected format for your API
+      body: JSON.stringify({
+        query_text: text,
+        // Add top_k if your API expects it
+        // top_k: 10
+      }),
+    });
+
+    // Assume the request was successful and parse the JSON
+    // NOTE: If fetch fails or response is not ok/not JSON, this will cause an error.
+    const data: ApiResponse = await response.json();
+
+    // 3. Add the AI's response to the chat display
+    // Assume data.response exists and is a string
+    const botMessage: Message = {
+      text: data.response, // Get the text from the API response
+      type: 'bot',        // Use 'bot' type consistent with state definition
+    };
+    // Use functional update
+    setMessages(prev => [...prev, botMessage]);
+
+    // Removed try/catch/finally block and error handling logic
+  };
+  // --- END SIMPLIFIED handleSend Function ---
+
+
+  // Render the UI structure
+  return (
+    // Keep the overall flex layout
+    <div className="flex h-screen">
+      {/* Render the Sidebar component */}
+      <Sidebar />
+      {/* Main chat area */}
+      <div className="flex flex-col flex-1 bg-white">
+        {/* Scrollable message area */}
+        <main className="flex-1 overflow-y-auto p-6">
+          {/* Map through messages and render ChatBubble for each */}
+          {/* Using index as key - consider unique IDs if messages can be deleted/reordered */}
+          {messages.map((msg, index) => (
+            <ChatBubble key={index} text={msg.text} type={msg.type} />
+          ))}
+          {/* Removed loading/error indicators */}
+        </main>
+        {/* Render the ChatInput component, passing the simplified handleSend */}
+        {/* Removed disabled prop handling */}
+        <ChatInput onSend={handleSend} />
+      </div>
+    </div>
+  );
+}

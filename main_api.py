@@ -1,11 +1,25 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from rag_query import query_rag
+from fastapi.middleware.cors import CORSMiddleware
 
 #create API
 app = FastAPI(
     title="RAG AI_AGENT",
     description="RAG Agent that look through data in a Chroma Database",
+)
+
+origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000", 
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  
+    allow_credentials=True, 
+    allow_methods=["*"],    
+    allow_headers=["*"],   
 )
 
 #request model for querying RAG needs a user query input
@@ -28,7 +42,7 @@ def execute_query(request: QueryRequest):
     if query_text == "":
         raise HTTPException(status_code=400, detail="Query cannot be empty.")
     
-    response_text = query_rag(query_text=query_text, k=k)
+    response_text = query_rag(query_text=query_text)
     
     return QueryResponse(response=response_text)
 

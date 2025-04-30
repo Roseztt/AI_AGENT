@@ -42,16 +42,16 @@ def main():
     parser.add_argument("top_k", type=int)
     args = parser.parse_args()
     query_text = args.query_text
-    query_rag(query_text, k=args.k)
+    query_rag(query_text)
 
 
-def query_rag(query_text: str, k: int = 10):
+def query_rag(query_text: str):
     # Prepare the DB 
     embedding_function = get_embedding_function()
     db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function)
 
     # Search the DB.
-    results = db.similarity_search_with_score(query_text, k=k)
+    results = db.similarity_search_with_score(query_text, k=10)
 
     #join document content
     document_contents = []
