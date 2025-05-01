@@ -1,5 +1,4 @@
 'use client';
-
 import { useState } from 'react';
 import Sidebar from '@/components/Sidebar'; 
 import ChatInput from '@/components/ChatInput'; 
@@ -8,7 +7,6 @@ import React from 'react';
 
 
 export default function Home() {
-
   type Message = {
     text: string;
     type: "user" | "bot";
@@ -34,11 +32,13 @@ export default function Home() {
       type: 'user',
     };
 
+    //send user message and set loading
     setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
 
     const apiUrl = 'http://localhost:8000/query/';
 
+    //send JSON to POST through API
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
@@ -50,18 +50,19 @@ export default function Home() {
       }),
     });
 
+    //get bot response
     const data: ApiResponse = await response.json();
 
+    //send bot message 
     const botMessage: Message = {
       text: data.response, 
       type: 'bot',        
-    };
-    // Use functional update
+    }
     setMessages(prev => [...prev, botMessage]);
     setIsLoading(false);
   };
 
-
+//return everything
   return (
     <div className="flex h-screen">
       <Sidebar />
