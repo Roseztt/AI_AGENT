@@ -1,0 +1,13 @@
+# Ignore Python virtual environment
+.venv/
+
+# Ignore Node.js dependencies folder within the frontend subfolder
+AI_AGENT_Frontend/node_modules/
+
+# Ignore Next.js build output directory
+AI_AGENT_Frontend/.next/
+
+# Ignore common OS files
+.DS_Store
+*.pyc
+__pycache__/
