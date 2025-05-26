@@ -11,3 +11,5 @@ AI_AGENT_Frontend/.next/
 .DS_Store
 *.pyc
 __pycache__/
+
+/.next/
