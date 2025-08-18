@@ -1,0 +1,9 @@
+.git
+.venv
+__pycache__
+*.log
+node_modules
+AI_AGENT_Frontend/node_modules
+.env
+*.csv
+.pytest_cache
